@@ -1,18 +1,20 @@
-FROM node:18  # أو الإصدار اللي بتستخدمه
+FROM node:18-alpine
+
+# تثبيت الأدوات اللي كانت ناقصة
+RUN npm install -g firebase-tools
 
 WORKDIR /app
 
-# الخطوة السحرية: تسطيب firebase tools جوه الصورة نفسها
-RUN npm install -g firebase-tools
-
+# نسخ ملفات الـ package أولاً لضمان الـ caching
 COPY package*.json ./
+
+# تثبيت الـ dependencies
 RUN npm install
 
+# نسخ "كل" الملفات (بما فيها firebase.json اللي جنبه)
 COPY . .
 
-# لو بتستخدم TypeScript لازم تعمل build
-RUN npm run build 
-
+# تأكد إن البورت 3000 مفتوح
 EXPOSE 3000
 
 # أمر التشغيل
