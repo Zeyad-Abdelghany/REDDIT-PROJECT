@@ -5,7 +5,7 @@ metadata:
   labels:
     app: reddit-clone
 spec:
-  replicas: 2
+  replicas: 1 # نصيحة: خليها 1 في الأول عشان الـ Build بياخد RAM كتير وميوقعش الـ Nodes
   selector:
     matchLabels:
       app: reddit-clone
@@ -18,10 +18,42 @@ spec:
       - name: reddit-clone
         image: zeyadabdelghanyy/reddit-clone:17
         command: ["/bin/sh", "-c"]
+        # الـ Build هنا هيقرأ الـ Env variables اللي تحتها علطول
         args:
         - "npm run build && npm start"
         ports:
         - containerPort: 3000
+        env:
+        - name: NEXT_PUBLIC_FIREBASE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: firebase-config
+              key: NEXT_PUBLIC_FIREBASE_API_KEY
+        - name: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: firebase-config
+              key: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+        - name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-config
+              key: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+        - name: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: firebase-config
+              key: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+        - name: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-config
+              key: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+        - name: NEXT_PUBLIC_FIREBASE_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-config
+              key: NEXT_PUBLIC_FIREBASE_APP_ID
         resources:
           limits:
             memory: "3Gi"
