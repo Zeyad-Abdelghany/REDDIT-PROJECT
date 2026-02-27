@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: reddit-clone
-        image: zeyadabdelghanyy/reddit-clone:13
+        image: zeyadabdelghanyy/reddit-clone:17
         command: ["/bin/sh", "-c"]
         args:
           - "npm install -g firebase-tools && npm start"
