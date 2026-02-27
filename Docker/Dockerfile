@@ -1,13 +1,19 @@
-FROM node:18-alpine
+FROM node:18  # أو الإصدار اللي بتستخدمه
 
-WORKDIR /reddit-clone
+WORKDIR /app
+
+# الخطوة السحرية: تسطيب firebase tools جوه الصورة نفسها
+RUN npm install -g firebase-tools
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
-RUN npm run build
+# لو بتستخدم TypeScript لازم تعمل build
+RUN npm run build 
 
 EXPOSE 3000
-CMD ["npm","start"]
+
+# أمر التشغيل
+CMD ["npm", "start"]

@@ -17,8 +17,19 @@ spec:
       containers:
       - name: reddit-clone
         image: zeyadabdelghanyy/reddit-clone:13
+        command: ["/bin/sh", "-c"]
+        args:
+          - "npm install -g firebase-tools && npm start"
         ports:
         - containerPort: 3000
+        # إضافة لضمان استقرار الـ Pod
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service
